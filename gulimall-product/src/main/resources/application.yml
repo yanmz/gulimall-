@@ -4,6 +4,19 @@ spring:
     password: root
     url: jdbc:mysql://115.29.142.129:3306/gulimall_pms?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
     driver-class-name: com.mysql.jdbc.Driver
+    hikari:
+      max-lifetime: 500000
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+    alicloud:
+      access-key: LTAI4GE9C7YuB79KKU6yMhA5
+      secret-key: mjs9XZcNBDjgNUe5VhgYeZOkkP1fpM
+      oss:
+        endpoint: oss-cn-shanghai.aliyuncs.com
+
+
 
 
 #mybatis plus xml配置文件映射
@@ -13,7 +26,14 @@ mybatis-plus:
   global-config:
     db-config:
       id-type: auto
+      logic-delete-value: 1 # 逻辑已删除值(默认为 1)
+      logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
 
 
 server:
   port: 10000
+
+#打印sql语句
+logging:
+  level:
+    com.atguigu.gulimall: debug

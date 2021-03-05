@@ -1,0 +1,52 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: test_route
+          uri: https://www.baidu.com
+          predicates:
+            - Query=url,baidu
+
+        - id: qq_route
+          uri: https://www.qq.com
+          predicates:
+            - Query=url,qq
+
+        #路由商品服务
+        - id: product_rote
+          uri: lb://gulimall-product
+          predicates:
+            - Path=/api/product/**
+          filters:
+            - RewritePath=/api(?<segment>/?.*), $\{segment}
+
+        #路由第三方服务
+        - id: third_party_rote
+          uri: lb://gulimall-third-party #lb 表示负载均衡
+          predicates:
+            - Path=/api/thirdparty/**
+          filters: #路径重写
+            - RewritePath=/api/thirdparty/(?<segment>/?.*), /$\{segment}
+
+
+        #路由会员服务
+        - id: member_rote
+          uri: lb://gulimall-member
+          predicates:
+            - Path=/api/member/**
+          filters:
+            - RewritePath=/api(?<segment>/?.*), $\{segment}
+
+        - id: admin_rote
+          uri: lb://renren-fast #lb 表示负载均衡
+          predicates:
+            - Path=/api/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/renren-fast/$\{segment}
+
+# http://localhost:8080/renren-fast/captcha.jpg?uuid=172efd91-e99c-401b-8167-c81690b13f52
+# http://localhost:88/api/captcha.jpg?uuid=172efd91-e99c-401b-8167-c81690b13f52
+
+
+
+
